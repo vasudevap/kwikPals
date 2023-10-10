@@ -19,7 +19,7 @@ connection.once('open', async () => {
   for (let i = 0; i < 20; i++) {
     // Get some random username objects using a helper function that we imported from ./data
     const email = getRandomName();
-    const username = email.split(' ')[0];
+    const username = email.split('@')[0];
     
     users.push({
       email,
