@@ -13,7 +13,6 @@ module.exports = {
   // Create a course
   async createUser(req, res) {
     try {
-      // console.log(req.body);
       const user = await User.create(req.body);
       res.json(user);
     } catch (err) {
@@ -21,21 +20,22 @@ module.exports = {
       return res.status(500).json(err);
     }
   },
-//   // Get a user
-//   async getSingleUser(req, res) {
-//     try {
-//       const user = await User.findOne({ _id: req.params.userId })
-//         .select('-__v');
+  // Get a user
+  async getSingleUser(req, res) {
+    try {
+      const user = await User.findOne({ id: req.params.userId })
+        .select('-__v');
 
-//       if (!user) {
-//         return res.status(404).json({ message: 'No user with that ID' });
-//       }
+      if (!user) {
+        return res.status(404).json({ message: 'No user with that ID' });
+      }
 
-//       res.json(user);
-//     } catch (err) {
-//       res.status(500).json(err);
-//     }
-//   },
+      res.json(user);
+    } catch (err) {
+      res.status(500).json(err);
+    }
+  },
+
 //   // Delete a course
 //   async deleteCourse(req, res) {
 //     try {
