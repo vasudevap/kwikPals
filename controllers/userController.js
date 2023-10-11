@@ -3,6 +3,8 @@ const { User } = require('../models');
 module.exports = {
   // Get all users
   async getUsers(req, res) {
+    console.log('kwikPal: getting all users');
+
     try {
       const users = await User.find();
       res.json(users);
@@ -13,6 +15,8 @@ module.exports = {
   },
   // Create a course
   async createUser(req, res) {
+    console.log('kwikPal: creating a new user');
+
     try {
       const user = await User.create(req.body);
       res.json(user);
@@ -23,6 +27,8 @@ module.exports = {
   },
   // Get a user
   async getSingleUser(req, res) {
+    console.log('kwikPal: getting a single user');
+
     try {
       const user = await User.findOne({ _id: req.params.id })
         .select('-__v');
@@ -40,6 +46,8 @@ module.exports = {
   },
   // Put to update a user
   async updateUser(req, res) {
+    console.log('kwikPal: updating a user');
+
     try {
       const user = await User.updateOne(
         { _id: req.params.id },
@@ -55,6 +63,8 @@ module.exports = {
   },
   // Delete user from kwikPals
   async deleteUser(req, res) {
+    console.log('kwikPal: deleting a user');
+
     try {
       const user = await User.findOneAndDelete({ _id: req.params.id });
 
@@ -71,13 +81,11 @@ module.exports = {
   // Add a friend to the friend's list
   async addFriend(req, res) {
     console.log('kwikPal: adding a friend');
-    console.log(req.body);
 
     try {
       const user = await User.findOneAndUpdate(
         { _id: req.params.id },
         { $addToSet: { friends: req.params.friendId } },
-        // { runValidators: true, new: true }
         { new: true }
       );
 
@@ -94,20 +102,21 @@ module.exports = {
   },
   // Remove friend from friend's list
   async removeFriend(req, res) {
+    console.log('kwikPal: removing a friend');
     try {
       const user = await User.findOneAndUpdate(
         { _id: req.params.id },
-        { $pull: { friends: { id: req.params.friendId } } },
-        { runValidators: true, new: true }
+        { $pull: { friends: req.params.friendId } },
+        {new: true },
       );
 
-      if (!student) {
+      if (!user) {
         return res
           .status(404)
-          .json({ message: 'No student found with that ID :(' });
+          .json({ message: 'No user found with that ID :(' });
       }
 
-      res.json(student);
+      res.json(user);
     } catch (err) {
       res.status(500).json(err);
     }
