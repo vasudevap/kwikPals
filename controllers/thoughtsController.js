@@ -3,7 +3,7 @@ const { Thought, User } = require('../models');
 module.exports = {
   // Get all thoughts
   async getThoughts(req, res) {
-    console.log('kwikPal: getting all thoughts');
+    console.log('kwikPals: getting all thoughts');
 
     try {
       const thought = await Thought.find();
@@ -13,9 +13,29 @@ module.exports = {
       res.status(500).json(err);
     }
   },
+  // Get one thought
+  async getSingleThought(req, res) {
+    console.log('kwikPals: getting a single thought');
+
+    try {
+      const thought = await Thought.findOne({
+        _id: req.params.id
+      });
+
+      if (!thought) {
+        throw new Error('Could not find thought in DB');
+      }
+
+      res.json(thought);
+    } catch (err) {
+      console.log(err);
+      return res.status(500).json(err);
+    }
+
+  },
   // Create a thought for a user
   async createThought(req, res) {
-    console.log('kwikPal: creating a new thought');
+    console.log('kwikPals: creating a new thought');
 
     try {
       const user = await User.findOne({
@@ -50,4 +70,5 @@ module.exports = {
       return res.status(500).json(err);
     }
   },
+  //
 };
