@@ -3,7 +3,7 @@ const { Thought, User } = require('../models');
 module.exports = {
   // Get all thoughts
   async getThoughts(req, res) {
-    console.log('kwikPal: getting all thoughts');
+    console.log('kwikPals: getting all thoughts');
 
     try {
       const thought = await Thought.find();
@@ -13,9 +13,29 @@ module.exports = {
       res.status(500).json(err);
     }
   },
-  // Create a thought for a user
+  // Get one thought
+  async getSingleThought(req, res) {
+    console.log('kwikPals: getting a single thought');
+
+    try {
+      const thought = await Thought.findOne({
+        _id: req.params.id
+      });
+
+      if (!thought) {
+        throw new Error('Could not find thought in DB');
+      }
+
+      res.json(thought);
+    } catch (err) {
+      console.log(err);
+      return res.status(500).json(err);
+    }
+
+  },
+  // Create one thought for one user
   async createThought(req, res) {
-    console.log('kwikPal: creating a new thought');
+    console.log('kwikPals: creating a new thought');
 
     try {
       const user = await User.findOne({
@@ -50,4 +70,70 @@ module.exports = {
       return res.status(500).json(err);
     }
   },
+  // Put update one thought
+  async updateThought(req, res) {
+    console.log('kwikPals: updating a new thought');
+
+    try {
+      const updatedThought = await Thought.findOneAndUpdate(
+        {
+          _id: req.params.id
+        },
+        {
+          thoughtText: req.body.thoughtText
+        },
+        {
+          new: true
+        }
+      );
+
+      if (!updatedThought) {
+        throw new Error('Could not find thought to update in DB');
+      }
+
+      res.json(updatedThought);
+    } catch (err) {
+      console.log(err);
+      return res.status(500).json(err);
+    }
+  },
+  // Delete one thought
+  async deleteThought(req, res) {
+    console.log('kwikPals: deleting a new thought');
+
+    try {
+
+      const thought = await Thought.findOne(
+        { _id: req.params.id }
+      )
+
+      if (!thought) {
+        throw new Error('Thought was not found in DB');
+      }
+
+      const user = await User.findOneAndUpdate(
+        { username: thought.username }, 
+        { $pull: { thoughts: req.params.id } },
+        { new: true }
+      );
+
+      if (!user) {
+        throw new Error('Could not find user in DB');
+      }
+
+      const deletedThought = await Thought.findOneAndRemove(
+        { _id: req.params.id }
+      );
+
+      if (!deletedThought) {
+        throw new Error('Removed from user but could not delete thought in DB');
+      }
+
+      res.status(200).json(thought);
+    } catch (err) {
+      console.log(err);
+      res.status(500).json(err);
+    }
+  },
+
 };
