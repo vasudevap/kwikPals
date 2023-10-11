@@ -11,7 +11,7 @@ module.exports = {
       res.status(500).json(err);
     }
   },
-  // Create a course
+  // Create a user
   async createUser(req, res) {
     try {
       const user = await User.create(req.body);
@@ -53,7 +53,7 @@ module.exports = {
       return res.status(500).json(err);
     }
   },
-  // Delete user from kwikPals
+  // Delete a user
   async deleteUser(req, res) {
     try {
       const user = await User.findOneAndDelete({ _id: req.params.id });
