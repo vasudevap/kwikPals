@@ -1,7 +1,6 @@
-const { Schema, model, now } = require('mongoose');
-const userSchema = require('./User');
+const { Schema, model } = require('mongoose');
 
-// Schema to create Student model
+// Schema to create thought model
 const thoughtSchema = new Schema(
   {
     thoughtText: {
@@ -14,7 +13,6 @@ const thoughtSchema = new Schema(
       required: true,
       default: Date.now,
     },
-    // thoughts: [thoughtSchema],
     username: {
       type: String,
       required: true,

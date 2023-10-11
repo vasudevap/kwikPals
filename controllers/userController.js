@@ -61,7 +61,7 @@ module.exports = {
       return res.status(500).json(err);
     }
   },
-  // Delete user from kwikPals
+  // Delete a user
   async deleteUser(req, res) {
     console.log('kwikPal: deleting a user');
 
