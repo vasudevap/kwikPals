@@ -56,11 +56,13 @@ module.exports = {
   // Delete a course
   async deleteCourse(req, res) {
     try {
-      const user = await User.findOneAndDelete({ _id: req.params.Id });
+      const user = await User.findOneAndDelete({ _id: req.params.id });
 
       if (!user) {
         res.status(404).json({ message: 'No user with that ID' });
       }
+
+      res.json(user);
     } catch (err) {
       console.log(err);
       return res.status(500).json(err);
