@@ -1,5 +1,5 @@
 const { Schema, model } = require('mongoose');
-// const thoughtSchema = require('./Thought');
+const thoughtSchema = require('./Thought');
 
 // Schema to create Student model
 const userSchema = new Schema(
@@ -14,13 +14,24 @@ const userSchema = new Schema(
       required: true,
       max_length: 50,
     },
-    // thoughts: [thoughtSchema],
-    // friends: [userSchema],
+    thoughts: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'Thoughts'
+      }
+    ],
+    friends: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'User'
+      }
+    ],
   },
   {
     toJSON: {
       virtuals: true,
     },
+    id: false,
   }
 );
 

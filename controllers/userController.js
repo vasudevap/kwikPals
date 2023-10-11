@@ -53,8 +53,8 @@ module.exports = {
       return res.status(500).json(err);
     }
   },
-  // Delete a course
-  async deleteCourse(req, res) {
+  // Delete user from kwikPals
+  async deleteUser(req, res) {
     try {
       const user = await User.findOneAndDelete({ _id: req.params.id });
 
@@ -67,30 +67,49 @@ module.exports = {
       console.log(err);
       return res.status(500).json(err);
     }
-  }
+  },
+  // Add a friend to the friend's list
+  async addFriend(req, res) {
+    console.log('kwikPal: adding a friend');
+    console.log(req.body);
 
-  //       await Thought.deleteMany({ _id: { $in: user.thougths } });
-  //       res.json({ message: 'User and thougths deleted!' });
-  //     } catch (err) {
-  //       res.status(500).json(err);
-  //     }
-  //   },
-  //   // Update a course
-  //   async updateUser(req, res) {
-  //     try {
-  //       const user = await User.findOneAndUpdate(
-  //         { _id: req.params.userId },
-  //         { $set: req.body },
-  //         { runValidators: true, new: true }
-  //       );
+    try {
+      const user = await User.findOneAndUpdate(
+        { _id: req.params.id },
+        { $addToSet: { friends: req.params.friendId } },
+        // { runValidators: true, new: true }
+        { new: true }
+      );
 
-  //       if (!user) {
-  //         res.status(404).json({ message: 'No user with this id!' });
-  //       }
+      if (!user) {
+        return res
+          .status(404)
+          .json({ message: 'No user found with that ID :(' });
+      }
 
-  //       res.json(user);
-  //     } catch (err) {
-  //       res.status(500).json(err);
-  //     }
-  //   },
+      res.json(user);
+    } catch (err) {
+      res.status(500).json(err);
+    }
+  },
+  // Remove friend from friend's list
+  async removeFriend(req, res) {
+    try {
+      const user = await User.findOneAndUpdate(
+        { _id: req.params.id },
+        { $pull: { friends: { id: req.params.friendId } } },
+        { runValidators: true, new: true }
+      );
+
+      if (!student) {
+        return res
+          .status(404)
+          .json({ message: 'No student found with that ID :(' });
+      }
+
+      res.json(student);
+    } catch (err) {
+      res.status(500).json(err);
+    }
+  },
 };
