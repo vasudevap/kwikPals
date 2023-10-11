@@ -72,6 +72,8 @@ module.exports = {
   },
   // Put update one thought
   async updateThought(req, res) {
+    console.log('kwikPals: updating a new thought');
+
     try {
       const updatedThought = await Thought.findOneAndUpdate(
         {
@@ -95,8 +97,43 @@ module.exports = {
       return res.status(500).json(err);
     }
   },
-  // 
-  // async deleteThought(req, res) {
-  // },
+  // Delete one thought
+  async deleteThought(req, res) {
+    console.log('kwikPals: deleting a new thought');
+
+    try {
+
+      const thought = await Thought.findOne(
+        { _id: req.params.id }
+      )
+
+      if (!thought) {
+        throw new Error('Thought was not found in DB');
+      }
+
+      const user = await User.findOneAndUpdate(
+        { username: thought.username }, 
+        { $pull: { thoughts: req.params.id } },
+        { new: true }
+      );
+
+      if (!user) {
+        throw new Error('Could not find user in DB');
+      }
+
+      const deletedThought = await Thought.findOneAndRemove(
+        { _id: req.params.id }
+      );
+
+      if (!deletedThought) {
+        throw new Error('Removed from user but could not delete thought in DB');
+      }
+
+      res.status(200).json(thought);
+    } catch (err) {
+      console.log(err);
+      res.status(500).json(err);
+    }
+  },
 
 };
