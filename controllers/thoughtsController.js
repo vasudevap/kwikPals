@@ -33,7 +33,7 @@ module.exports = {
     }
 
   },
-  // Create a thought for a user
+  // Create one thought for one user
   async createThought(req, res) {
     console.log('kwikPals: creating a new thought');
 
@@ -70,5 +70,33 @@ module.exports = {
       return res.status(500).json(err);
     }
   },
-  //
+  // Put update one thought
+  async updateThought(req, res) {
+    try {
+      const updatedThought = await Thought.findOneAndUpdate(
+        {
+          _id: req.params.id
+        },
+        {
+          thoughtText: req.body.thoughtText
+        },
+        {
+          new: true
+        }
+      );
+
+      if (!updatedThought) {
+        throw new Error('Could not find thought to update in DB');
+      }
+
+      res.json(updatedThought);
+    } catch (err) {
+      console.log(err);
+      return res.status(500).json(err);
+    }
+  },
+  // 
+  // async deleteThought(req, res) {
+  // },
+
 };
