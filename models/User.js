@@ -15,12 +15,18 @@ const userSchema = new Schema(
       max_length: 50,
     },
     // thoughts: [thoughtSchema],
-    // friends: [userSchema],
+    friends: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'User'
+      }
+    ],
   },
   {
     toJSON: {
       virtuals: true,
     },
+    id:false,
   }
 );
 
