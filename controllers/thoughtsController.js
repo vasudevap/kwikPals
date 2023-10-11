@@ -34,7 +34,7 @@ module.exports = {
         throw new Error('Could not create Thought in DB');
       }
 
-      updatedUser = await User.updateOne(
+      const updatedUser = await User.updateOne(
         { _id: user._id },
         { $addToSet: { thoughts: thought._id } },
         { new: true }
