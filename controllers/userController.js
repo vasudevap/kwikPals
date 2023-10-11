@@ -13,7 +13,7 @@ module.exports = {
       res.status(500).json(err);
     }
   },
-  // Create a course
+  // Create a new user
   async createUser(req, res) {
     console.log('kwikPal: creating a new user');
 
