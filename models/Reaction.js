@@ -1,4 +1,5 @@
 const { Schema, Types } = require('mongoose');
+const formatDate = require('../utils/helper'); 
 
 const reactionSchema = new Schema(
   {
@@ -18,7 +19,10 @@ const reactionSchema = new Schema(
     },
     createdAt: {
       type: Date,
+      required: true,
       default: Date.now,
+      //use moment to format date on input
+      get: time => formatDate(time), 
     },
   },
   {
