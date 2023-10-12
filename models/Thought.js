@@ -1,6 +1,6 @@
 const { Schema, model } = require('mongoose');
 const reactionSchema = require('./Reaction');
-const moment = require('moment'); 
+const formatDate = require('../utils/helper'); 
 
 // Schema to create thought model
 const thoughtSchema = new Schema(
@@ -15,7 +15,7 @@ const thoughtSchema = new Schema(
       required: true,
       default: Date.now,
       //use moment to format date on input
-      get: time => formattedDate(time), 
+      get: time => formatDate(time), 
     },
     username: {
       type: String,
@@ -39,11 +39,6 @@ thoughtSchema
   .get(function () {
     return this.reactions.length;
   });
-
-// Function to format the date and return
-const formattedDate = function(createdAt) {
-  return moment(createdAt).format('MMMM Do YYYY, h:mm a'); // October 12th 2023, 4:30 pm
-}
 
 const Thought = model('thought', thoughtSchema);
 
