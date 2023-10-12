@@ -141,7 +141,7 @@ module.exports = {
 
     try {
       const thought = await Thought.findOneAndUpdate(
-        { _id: req.params.studentId },
+        { _id: req.params.id },
         { $addToSet: { reactions: req.body } },
         { runValidators: true, new: true }
       );
