@@ -1,4 +1,4 @@
-const { User } = require('../models');
+const { User, Thought } = require('../models');
 
 module.exports = {
   // Get all users
@@ -18,7 +18,11 @@ module.exports = {
     console.log('kwikPal: creating a new user');
 
     try {
-      const user = await User.create(req.body);
+      const user = await User.create({ 
+        username: req.body.username.trim(),
+        email: req.body.email.trim()
+      });
+
       res.json(user);
     } catch (err) {
       console.log(err);
@@ -66,6 +70,11 @@ module.exports = {
     console.log('kwikPal: deleting a user');
 
     try {
+      const userInDB = await User.findOne({ _id: req.params.id });
+      if (!userInDB) {
+        res.status(404).json({ message: 'No user with that ID' });
+      }
+
       const user = await User.findOneAndDelete({ _id: req.params.id });
 
       if (!user) {
@@ -107,7 +116,7 @@ module.exports = {
       const user = await User.findOneAndUpdate(
         { _id: req.params.id },
         { $pull: { friends: req.params.friendId } },
-        {new: true },
+        { new: true },
       );
 
       if (!user) {
