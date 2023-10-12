@@ -18,10 +18,7 @@ module.exports = {
     console.log('kwikPal: creating a new user');
 
     try {
-      const user = await User.create({ 
-        username: req.body.username.trim(),
-        email: req.body.email.trim()
-      });
+      const user = await User.create(req.body);
 
       res.json(user);
     } catch (err) {
