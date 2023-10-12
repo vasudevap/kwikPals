@@ -13,28 +13,41 @@ const thoughtSchema = new Schema(
       type: Date,
       required: true,
       default: Date.now,
+      // get: formattedDate,
     },
     username: {
       type: String,
       required: true,
       max_length: 50,
     },
-    reactions: [ reactionSchema ]
+    reactions: [reactionSchema]
   },
   {
     toJSON: {
       virtuals: true,
+      getters: true,
     },
-    id:false,
+    id: false,
   }
 );
 
 // Virtual for reactionCount
 thoughtSchema
-.virtual('reactionCount')
-.get(function () {
-  return this.reactions.length;
-});
+  .virtual('reactionCount')
+  .get(function () {
+    return this.reactions.length;
+  });
+
+// Function to format the date and return
+function formattedDate (createdAt) {
+  return {
+    $dateToString: {
+      date: this.createdAt,
+      format: "%b %d, %G at %H:%M",
+      timezone: "America/Toronto"
+    }
+  }
+}
 
 const Thought = model('thought', thoughtSchema);
 
