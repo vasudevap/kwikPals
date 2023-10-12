@@ -98,7 +98,7 @@ module.exports = {
     }
   },
   // Delete one thought
-  async deleteThought(req, res) {
+  async removeThought(req, res) {
     console.log('kwikPals: deleting a new thought');
 
     try {
@@ -156,6 +156,25 @@ module.exports = {
       return res.status(500).json(err);
     }
   },
+  // Delete one reaction
+  async removeReaction(req, res) {
+    console.log('kwikPals: removing a reaction');
 
+    try {
+      const thought = await Thought.findOneAndUpdate(
+        { _id: req.params.id },
+        { $pull: { reactions: { reactionId: req.params.reactionId } } },
+        { runValidators: true, new: true }
+      );
 
-};
+      if (!thought) {
+        throw new Error('Could not delete reaction from thought in DB');
+      }
+
+      res.json(thought);
+    } catch (err) {
+      console.log(err);
+      return res.status(500).json(err);
+    }
+  }
+}
