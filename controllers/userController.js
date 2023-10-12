@@ -75,6 +75,14 @@ module.exports = {
         res.status(404).json({ message: 'No user with that ID' });
       }
 
+      // delete user's thoughts
+      for (let i = 0; i < userInDB.length; i++) {
+        const thoughtInDB = await Thought.findOneAndDelete(
+          { _id: userInDB.thoughts[i] }
+        );
+        console.log("kwikPal: User's thought " + userInDB.thoughts[i] + " also deleted");
+      }
+
       const user = await User.findOneAndDelete({ _id: req.params.id });
 
       if (!user) {
