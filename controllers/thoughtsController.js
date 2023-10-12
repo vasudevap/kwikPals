@@ -98,7 +98,7 @@ module.exports = {
     }
   },
   // Delete one thought
-  async deleteThought(req, res) {
+  async removeThought(req, res) {
     console.log('kwikPals: deleting a new thought');
 
     try {
@@ -112,7 +112,7 @@ module.exports = {
       }
 
       const user = await User.findOneAndUpdate(
-        { username: thought.username }, 
+        { username: thought.username },
         { $pull: { thoughts: req.params.id } },
         { new: true }
       );
@@ -135,5 +135,46 @@ module.exports = {
       res.status(500).json(err);
     }
   },
+  // Create one reaction
+  async createReaction(req, res) {
+    console.log('kwikPals: creating a new reaction');
 
-};
+    try {
+      const thought = await Thought.findOneAndUpdate(
+        { _id: req.params.id },
+        { $addToSet: { reactions: req.body } },
+        { runValidators: true, new: true }
+      );
+
+      if (!thought) {
+        throw new Error('Could not get/update thought in DB with new reaction');
+      }
+
+      res.json(thought);
+    } catch (err) {
+      console.log(err);
+      return res.status(500).json(err);
+    }
+  },
+  // Delete one reaction
+  async removeReaction(req, res) {
+    console.log('kwikPals: removing a reaction');
+
+    try {
+      const thought = await Thought.findOneAndUpdate(
+        { _id: req.params.id },
+        { $pull: { reactions: { reactionId: req.params.reactionId } } },
+        { runValidators: true, new: true }
+      );
+
+      if (!thought) {
+        throw new Error('Could not delete reaction from thought in DB');
+      }
+
+      res.json(thought);
+    } catch (err) {
+      console.log(err);
+      return res.status(500).json(err);
+    }
+  }
+}
