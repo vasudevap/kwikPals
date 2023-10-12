@@ -14,6 +14,9 @@ const userSchema = new Schema(
       type: String,
       required: true,
       max_length: 50,
+      // validate: {
+      //   if(email)
+      // }
     },
     thoughts: [
       {
