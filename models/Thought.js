@@ -13,6 +13,7 @@ const thoughtSchema = new Schema(
       type: Date,
       required: true,
       default: Date.now,
+      get: formattedDate,
     },
     username: {
       type: String,
@@ -24,6 +25,7 @@ const thoughtSchema = new Schema(
   {
     toJSON: {
       virtuals: true,
+      getters: true,
     },
     id:false,
   }
@@ -35,6 +37,11 @@ thoughtSchema
 .get(function () {
   return this.reactions.length;
 });
+
+// Function to format the date and return
+function formattedDate (createdAt) {
+  return createdAt;
+}
 
 const Thought = model('thought', thoughtSchema);
 
